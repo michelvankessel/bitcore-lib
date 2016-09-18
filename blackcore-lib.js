@@ -1922,7 +1922,7 @@ Hash.sha512 = function(buf) {
 
 Hash.scrypt = function(buf) {
   $.checkArgument(BufferUtil.isBuffer(buf));
-  return scrypt(buf, buf, 1024, 1, 1, 32);
+  return BufferUtil.reverse(scrypt(buf, buf, 1024, 1, 1, 32));
 };
 
 Hash.sha512.blocksize = 1024;
@@ -4591,11 +4591,11 @@ var livenet = get('livenet');
 addNetwork({
   name: 'testnet',
   alias: 'regtest',
-  pubkeyhash: 0x19,
-  privatekey: 0x99,
-  scripthash: 0x55,
-  xpubkey: 0x02cfbede,
-  xprivkey: 0x02cfbf60
+  pubkeyhash: 0x6f,
+  privatekey: 0xef,
+  scripthash: 0xc4,
+  xpubkey: 0x043587cf,
+  xprivkey: 0x04358394
 });
 
 /**
@@ -4607,13 +4607,13 @@ var testnet = get('testnet');
 // Add configurable values for testnet/regtest
 
 var TESTNET = {
-  PORT: 15714,
-  NETWORK_MAGIC: BufferUtil.integerAsBuffer(0x70352205),
+  PORT: 18333,
+  NETWORK_MAGIC: BufferUtil.integerAsBuffer(0x0b110907),
   DNS_SEEDS: [
-    'rat4.blackcoin.co',
-    'seed.blackcoin.co',
-    '6.syllabear.us.to',
-    'bcseed.syllabear.us.to'
+    'testnet-seed.bitcoin.petertodd.org',
+    'testnet-seed.bluematt.me',
+    'testnet-seed.alexykot.me',
+    'testnet-seed.bitcoin.schildbach.de'
   ]
 };
 
@@ -4624,8 +4624,8 @@ for (var key in TESTNET) {
 }
 
 var REGTEST = {
-  PORT: 15714,
-  NETWORK_MAGIC: BufferUtil.integerAsBuffer(0x70352205),
+  PORT: 18444,
+  NETWORK_MAGIC: BufferUtil.integerAsBuffer(0xfabfb5da),
   DNS_SEEDS: []
 };
 
@@ -9577,6 +9577,7 @@ Transaction.prototype.toBuffer = function() {
 
 Transaction.prototype.toBufferWriter = function(writer) {
   writer.writeUInt32LE(this.version);
+  writer.writeUInt32LE(this.nTime);
   writer.writeVarintNum(this.inputs.length);
   _.each(this.inputs, function(input) {
     input.toBufferWriter(writer);
@@ -9599,6 +9600,7 @@ Transaction.prototype.fromBufferReader = function(reader) {
   var i, sizeTxIns, sizeTxOuts;
 
   this.version = reader.readUInt32LE();
+  this.nTime = reader.readUInt32LE();
   sizeTxIns = reader.readVarintNum();
   for (i = 0; i < sizeTxIns; i++) {
     var input = Input.fromBufferReader(reader);
@@ -9624,6 +9626,7 @@ Transaction.prototype.toObject = Transaction.prototype.toJSON = function toObjec
   var obj = {
     hash: this.hash,
     version: this.version,
+	nTime: this.nTime,
     inputs: inputs,
     outputs: outputs,
     nLockTime: this.nLockTime
@@ -9684,6 +9687,7 @@ Transaction.prototype.fromObject = function fromObject(arg) {
   }
   this.nLockTime = transaction.nLockTime;
   this.version = transaction.version;
+  this.nTime = transaction.nTime;
   this._checkConsistency(arg);
   return this;
 };
@@ -9777,6 +9781,7 @@ Transaction.prototype.fromString = function(string) {
 Transaction.prototype._newTransaction = function() {
   this.version = CURRENT_VERSION;
   this.nLockTime = DEFAULT_NLOCKTIME;
+  this.nTime = Math.round(new Date().getTime() / 1000);
 };
 
 /* Transaction creation interface */
@@ -18351,7 +18356,7 @@ module.exports={
   "_args": [
     [
       "elliptic@https://registry.npmjs.org/elliptic/-/elliptic-3.0.3.tgz",
-      "/home/janko33/copay/blackcore-libv0.13.19"
+      "/home/janko33/copay/bitcore-lib"
     ]
   ],
   "_from": "elliptic@=3.0.3",
@@ -18376,7 +18381,7 @@ module.exports={
   "_shasum": "865c9b420bfbe55006b9f969f97a0d2c44966595",
   "_shrinkwrap": null,
   "_spec": "elliptic@https://registry.npmjs.org/elliptic/-/elliptic-3.0.3.tgz",
-  "_where": "/home/janko33/copay/blackcore-libv0.13.19",
+  "_where": "/home/janko33/copay/bitcore-lib",
   "author": {
     "email": "fedor@indutny.com",
     "name": "Fedor Indutny"
@@ -31073,7 +31078,7 @@ module.exports={
     "buffer-compare": "=1.0.0",
     "elliptic": "=3.0.3",
     "inherits": "=2.0.1",
-	"scryptsy": "^2.0.0",
+	"scryptsy": "=2.0.0",
     "lodash": "=3.10.1"
   },
   "devDependencies": {
@@ -52422,11 +52427,10 @@ bitcore.deps.bs58 = require('bs58');
 bitcore.deps.Buffer = Buffer;
 bitcore.deps.elliptic = require('elliptic');
 bitcore.deps._ = require('lodash');
-bitcore.deps.scrypt = require('scryptsy');
 
 // Internal usage, exposed for testing/advanced tweaking
 bitcore._HDKeyCache = require('./lib/hdkeycache');
 bitcore.Transaction.sighash = require('./lib/transaction/sighash');
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer)
-},{"./lib/address":1,"./lib/block":4,"./lib/block/blockheader":3,"./lib/block/merkleblock":5,"./lib/crypto/bn":6,"./lib/crypto/ecdsa":7,"./lib/crypto/hash":8,"./lib/crypto/point":9,"./lib/crypto/random":10,"./lib/crypto/signature":11,"./lib/encoding/base58":12,"./lib/encoding/base58check":13,"./lib/encoding/bufferreader":14,"./lib/encoding/bufferwriter":15,"./lib/encoding/varint":16,"./lib/errors":17,"./lib/hdkeycache":19,"./lib/hdprivatekey.js":20,"./lib/hdpublickey.js":21,"./lib/networks":22,"./lib/opcode":23,"./lib/privatekey":24,"./lib/publickey":25,"./lib/script":26,"./lib/transaction":29,"./lib/transaction/sighash":37,"./lib/unit":41,"./lib/uri":42,"./lib/util/buffer":43,"./lib/util/js":44,"./lib/util/preconditions":45,"./package.json":73,"bn.js":46,"bs58":47,"buffer":119,"elliptic":49,"lodash":71,"scryptsy":72}]},{},[]);
+},{"./lib/address":1,"./lib/block":4,"./lib/block/blockheader":3,"./lib/block/merkleblock":5,"./lib/crypto/bn":6,"./lib/crypto/ecdsa":7,"./lib/crypto/hash":8,"./lib/crypto/point":9,"./lib/crypto/random":10,"./lib/crypto/signature":11,"./lib/encoding/base58":12,"./lib/encoding/base58check":13,"./lib/encoding/bufferreader":14,"./lib/encoding/bufferwriter":15,"./lib/encoding/varint":16,"./lib/errors":17,"./lib/hdkeycache":19,"./lib/hdprivatekey.js":20,"./lib/hdpublickey.js":21,"./lib/networks":22,"./lib/opcode":23,"./lib/privatekey":24,"./lib/publickey":25,"./lib/script":26,"./lib/transaction":29,"./lib/transaction/sighash":37,"./lib/unit":41,"./lib/uri":42,"./lib/util/buffer":43,"./lib/util/js":44,"./lib/util/preconditions":45,"./package.json":73,"bn.js":46,"bs58":47,"buffer":119,"elliptic":49,"lodash":71}]},{},[]);
