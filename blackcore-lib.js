@@ -10987,8 +10987,8 @@ URI.isValid = function(arg, knownParams) {
 URI.parse = function(uri) {
   var info = URL.parse(uri, true);
 
-  if (info.protocol !== 'bitcoin:') {
-    throw new TypeError('Invalid bitcoin URI');
+  if (info.protocol !== 'blackcoin:') {
+    throw new TypeError('Invalid blackcoin URI');
   }
 
   // workaround to host insensitiveness
@@ -11082,7 +11082,7 @@ URI.prototype.toString = function() {
   _.extend(query, this.extras);
 
   return URL.format({
-    protocol: 'bitcoin:',
+    protocol: 'blackcoin:',
     host: this.address,
     query: query
   });
