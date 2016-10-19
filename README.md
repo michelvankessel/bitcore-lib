@@ -1,29 +1,24 @@
-Bitcore Library
+Blackcore Library
 =======
 
-[![NPM Package](https://img.shields.io/npm/v/bitcore-lib.svg?style=flat-square)](https://www.npmjs.org/package/bitcore-lib)
-[![Build Status](https://img.shields.io/travis/bitpay/bitcore-lib.svg?branch=master&style=flat-square)](https://travis-ci.org/bitpay/bitcore-lib)
-[![Coverage Status](https://img.shields.io/coveralls/bitpay/bitcore-lib.svg?style=flat-square)](https://coveralls.io/r/bitpay/bitcore-lib)
-
-A pure and powerful JavaScript Bitcoin library.
+A pure and powerful JavaScript Blackcoin library.
 
 ## Principles
 
-Bitcoin is a powerful new peer-to-peer platform for the next generation of financial technology. The decentralized nature of the Bitcoin network allows for highly resilient bitcoin infrastructure, and the developer community needs reliable, open-source tools to implement bitcoin apps and services.
+Blackcoin is a powerful new peer-to-peer platform for the next generation of financial technology. The decentralized nature of the Blackcoin network allows for highly resilient blackcoin infrastructure, and the developer community needs reliable, open-source tools to implement blackcoin apps and services.
 
 ## Get Started
 
 ```
-npm install bitcore-lib
+git clone -b blackcore-lib https://github.com/janko33bd/bitcore-lib.git blackcore-lib
+cd blackcore-lib
+npm install
 ```
 
-```
-bower install bitcore-lib
-```
 
 ## Documentation
 
-The complete docs are hosted here: [bitcore documentation](http://bitcore.io/guide/). There's also a [bitcore API reference](http://bitcore.io/api/) available generated from the JSDocs of the project, where you'll find low-level details on each bitcore utility.
+Blackcore-lib is a for of bitcore. The complete docs are hosted here: [bitcore documentation](http://bitcore.io/guide/). There's also a [bitcore API reference](http://bitcore.io/api/) available generated from the JSDocs of the project, where you'll find low-level details on each bitcore utility.
 
 - [Read the Developer Guide](http://bitcore.io/guide/)
 - [Read the API Reference](http://bitcore.io/api/)
@@ -73,12 +68,6 @@ To verify signatures, use the following PGP keys:
 
 
 ## Development & Tests
-
-```sh
-git clone https://github.com/bitpay/bitcore-lib
-cd bitcore-lib
-npm install
-```
 
 Run all the tests:
 
