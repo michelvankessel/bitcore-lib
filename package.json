@@ -83,7 +83,7 @@
     "bs58": "2.0.1",
     "bn.js": "2.2.0",
     "buffer-compare": "1.1.1",
-    "elliptic": "6.5.3",
+    "elliptic": "6.5.4",
 	"scryptsy": "2.1.0",
     "inherits": "2.0.4",
     "lodash": "4.17.20"
